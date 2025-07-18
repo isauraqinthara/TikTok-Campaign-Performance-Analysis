@@ -231,3 +231,51 @@ coef_df = pd.DataFrame({
 })
 print("\nModel Coefficients:")
 print(coef_df)
+
+# ----------------------------------------
+# STEP 8: CLIENT SEGMENTATION - CLUSTERING BASED ON PERFORMANCE METRICS
+# ----------------------------------------
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans
+
+# Select features for clustering
+cluster_features = df.groupby("Client Name")[["CTR", "CPS", "ROAS", "Conversion Rate"]].mean()
+
+# Normalize features
+scaler = StandardScaler()
+scaled_features = scaler.fit_transform(cluster_features)
+
+# Apply KMeans clustering
+kmeans = KMeans(n_clusters=3, random_state=42, n_init='auto')
+cluster_labels = kmeans.fit_predict(scaled_features)
+
+# Add cluster labels to dataframe
+cluster_features['Cluster'] = cluster_labels
+
+# Reset index for plotting
+cluster_plot_df = cluster_features.reset_index()
+
+# Visualize clustering result
+fig = plt.figure()
+sns.scatterplot(
+    data=cluster_plot_df,
+    x="ROAS",
+    y="Conversion Rate",
+    hue="Cluster",
+    style="Cluster",
+    palette="Set2",
+    s=100
+)
+plt.title("Client Segmentation based on ROAS & Conversion Rate")
+plt.xlabel("ROAS")
+plt.ylabel("Conversion Rate")
+save_plot(fig, 'Client_Segmentation_ROAS_vs_CR.png')
+
+# Output cluster assignments
+print("\nClient Segmentation Result\n")
+print(cluster_features)
+
+# Save cluster assignments
+cluster_features.to_csv('visualizations/clustered_clients.csv')
+print("Visualisasi 'Client_Segmentation_ROAS_vs_CR.png' dan data 'clustered_clients.csv' telah disimpan.")
