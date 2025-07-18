@@ -279,3 +279,13 @@ print(cluster_features)
 # Save cluster assignments
 cluster_features.to_csv('visualizations/clustered_clients.csv')
 print("Visualisasi 'Client_Segmentation_ROAS_vs_CR.png' dan data 'clustered_clients.csv' telah disimpan.")
+
+# ----------------------------------------
+# EXPORT
+# ----------------------------------------
+
+# Export main data
+df.to_excel("cleaned_campaign_data.xlsx", index=False)
+
+# Export data agregat & cluster per client
+cluster_features.to_excel("client_clusters.xlsx")
