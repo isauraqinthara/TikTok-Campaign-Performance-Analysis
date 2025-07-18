@@ -276,6 +276,10 @@ save_plot(fig, 'Client_Segmentation_ROAS_vs_CR.png')
 print("\nClient Segmentation Result\n")
 print(cluster_features)
 
+# Mean Metrics per Cluster
+print("\nMean Metrics per Cluster:\n")
+print(cluster_features.groupby('Cluster')[["CTR", "CPS", "ROAS", "Conversion Rate"]].mean())
+
 # Save cluster assignments
 cluster_features.to_csv('visualizations/clustered_clients.csv')
 print("Visualisasi 'Client_Segmentation_ROAS_vs_CR.png' dan data 'clustered_clients.csv' telah disimpan.")
